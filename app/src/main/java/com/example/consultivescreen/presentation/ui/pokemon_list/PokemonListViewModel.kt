@@ -20,7 +20,6 @@ class PokemonListViewModel
     private val getPokemonList : GetPokemonList,
 ) : ViewModel()
 {
-
     // Pagination starts at '1' (-1 = exhausted)
     val page = mutableStateOf(1)
 
@@ -31,6 +30,8 @@ class PokemonListViewModel
     val error = mutableStateOf("")
 
     init {
+
+        onTriggerEvent(PokemonListEvent.StartEvent)
 
         viewModelScope.launch {
             getPokemonList.flowOfPokes.collect {
