@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.consultivescreen.domain.model.PokemonDetailDomain
-import com.example.consultivescreen.TAG
+import com.example.consultivescreen.util.TAG
 import com.example.consultivescreen.domain.use_cases.pokemon_list.GetPokemonList
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
