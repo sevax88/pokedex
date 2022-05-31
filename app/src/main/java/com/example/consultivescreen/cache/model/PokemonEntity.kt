@@ -14,8 +14,11 @@ data class PokemonEntity (
     @ColumnInfo(name = "name")
     var name: String,
 
-    @ColumnInfo(name = "type")
-    var type: String,
+    @ColumnInfo(name = "typeOne")
+    var typeOne: String,
+
+    @ColumnInfo(name = "typeTwo")
+    var typeTwo: String? = null,
 
     @ColumnInfo(name = "sprite")
     var pokemonSprite: String

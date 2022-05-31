@@ -49,19 +49,19 @@ fun PokemonListScreen (
                 .padding(contentPadding)
                 .fillMaxSize()) {
 
-                if (loading) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(alignment = Alignment.Center),
-                        color = Color.Red
-                    )
-                }
-
                 PokemonList(
                     loading = loading,
                     pokemonDetailDomains = pokemonDetailDomains,
                     onTriggerNextPage = {viewModel.onTriggerEvent(PokemonListEvent.NextPageEvent)} ,
                     page = page,
                 )
+
+                if (loading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(alignment = Alignment.Center),
+                        color = Color.Red
+                    )
+                }
             }
 
         }

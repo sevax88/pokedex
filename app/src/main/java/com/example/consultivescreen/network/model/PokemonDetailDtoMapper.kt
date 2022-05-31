@@ -6,7 +6,11 @@ import com.example.consultivescreen.domain.util.DomainMapper
 class PokemonDetailDtoMapper : DomainMapper<PokemonDetailDto, PokemonDetailDomain> {
 
     override fun mapToDomainModel(model: PokemonDetailDto): PokemonDetailDomain {
-        return PokemonDetailDomain(model.id, model.name, model.pokemonSpritesDto.frontDefault ?: "", model.typeDtos.first().type.name)
+        val types = mutableListOf<String>()
+        for (type in model.typeDtos){
+            types.add(type.type.name)
+        }
+        return PokemonDetailDomain(model.id, model.name, model.pokemonSpritesDto.frontDefault ?: "", types)
     }
 
     //I will not use this in this exercise, needed in case of the need to upload info to the network.

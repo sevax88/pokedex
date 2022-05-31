@@ -37,7 +37,7 @@ fun PokemonView(
             .fillMaxWidth()
             .width(120.dp),
         elevation = 8.dp,
-        ) {
+    ) {
         Row(
             modifier = Modifier.fillMaxSize(),
             verticalAlignment = Alignment.CenterVertically,
@@ -46,38 +46,54 @@ fun PokemonView(
 
             Column(modifier = Modifier.padding(4.dp)) {
                 Row(modifier = Modifier.padding(8.dp)) {
-                   Text(
-                       text = "# " + pokemonDetailDomain.id.toString(),
-                       modifier = Modifier.padding(horizontal = 8.dp),
-                       style = MaterialTheme.typography.h6
-                   )
-                   Text(
-                       text = pokemonDetailDomain.name.capitalize(),
-                       fontWeight = FontWeight.Bold,
-                       style = MaterialTheme.typography.h6
-                   )
+                    Text(
+                        text = "# " + pokemonDetailDomain.id.toString(),
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        style = MaterialTheme.typography.h6
+                    )
+                    Text(
+                        text = pokemonDetailDomain.name.capitalize(),
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.h6
+                    )
                 }
 
                 Row(modifier = Modifier.padding(8.dp)) {
                     OutlinedButton(
-                        onClick = {  },
+                        onClick = { },
                         border = BorderStroke(1.dp, Color.White),
                         shape = RoundedCornerShape(40)
+                    ) {
+                        Text(
+                            text = pokemonDetailDomain.types.first(),
+                            color = Color.White,
+                            style = MaterialTheme.typography.body2
+                        )
+                    }
+
+                    if (pokemonDetailDomain.types.size > 1) {
+                        OutlinedButton(
+                            modifier = Modifier.padding(start = 8.dp),
+                            onClick = { },
+                            border = BorderStroke(1.dp, Color.White),
+                            shape = RoundedCornerShape(40)
                         ) {
-                       Text(
-                           text = pokemonDetailDomain.type,
-                           color = Color.White,
-                           style = MaterialTheme.typography.body2
-                       )
+                            Text(
+                                text = pokemonDetailDomain.types[1],
+                                color = Color.White,
+                                style = MaterialTheme.typography.body2
+                            )
+                        }
                     }
                 }
-            }
 
+            }
             Box(
                 modifier = Modifier
                     .drawBehind {
                         drawCircle(
-                            color = typesColors[pokemonDetailDomain.type] ?: Color.White,
+                            color = typesColors[pokemonDetailDomain.types.first()]
+                                ?: Color.White,
                             radius = 150f
                         )
                     }
@@ -96,12 +112,12 @@ fun PokemonView(
 
         }
     }
-
 }
+
 
 @Preview
 @Composable
 fun PokemonViewPreview() {
-    val pokemon = PokemonDetailDomain(id = 1, name = "bulbasaur", type = "Plant", image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
+    val pokemon = PokemonDetailDomain(id = 1, name = "bulbasaur", types = listOf("Plant", "Dark"), image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
     PokemonView(pokemonDetailDomain = pokemon)
 }
