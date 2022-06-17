@@ -1,6 +1,7 @@
 package com.example.consultivescreen.presentation.ui.pokemon_list
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -22,11 +23,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.consultivescreen.domain.model.PokemonDetailDomain
+import com.example.consultivescreen.domain.model.StatDomain
 import com.example.consultivescreen.util.typesColors
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun PokemonView(
+    modifier: Modifier,
     pokemonDetailDomain : PokemonDetailDomain
 ) {
     Card(
@@ -118,6 +121,12 @@ fun PokemonView(
 @Preview
 @Composable
 fun PokemonViewPreview() {
-    val pokemon = PokemonDetailDomain(id = 1, name = "bulbasaur", types = listOf("Plant", "Dark"), image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png")
-    PokemonView(pokemonDetailDomain = pokemon)
+    val pokemon = PokemonDetailDomain(
+        id = 1,
+        name = "bulbasaur",
+        types = listOf("Plant", "Dark"),
+        image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png",
+        listOfStats = listOf(StatDomain(name = "hp", value = 15))
+    )
+    PokemonView(pokemonDetailDomain = pokemon, modifier = Modifier.background(color = Color.Red))
 }

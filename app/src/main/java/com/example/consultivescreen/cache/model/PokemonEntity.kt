@@ -3,6 +3,7 @@ package com.example.consultivescreen.cache.model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.consultivescreen.domain.model.StatDomain
 
 @Entity(tableName = "pokemons")
 data class PokemonEntity (
@@ -21,5 +22,24 @@ data class PokemonEntity (
     var typeTwo: String? = null,
 
     @ColumnInfo(name = "sprite")
-    var pokemonSprite: String
+    var pokemonSprite: String,
+
+    @ColumnInfo(name = "stat_attack")
+    var statAttack: Int,
+
+    @ColumnInfo(name = "stat_defense")
+    var statDefense: Int,
+
+    @ColumnInfo(name = "stat_hp")
+    var statHp: Int,
+
+    @ColumnInfo(name = "stat_sp_attack")
+    var statSpecialAttack: Int,
+
+    @ColumnInfo(name = "stat_sp_defense")
+    var statSpecialDefense: Int,
+
+    @ColumnInfo(name = "stat_speed")
+    var statSpeed: Int,
+
 )

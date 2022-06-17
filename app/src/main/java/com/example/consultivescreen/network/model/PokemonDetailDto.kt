@@ -14,7 +14,42 @@ data class PokemonDetailDto (
     var typeDtos: List<PokemonTypeDto>,
 
     @SerializedName(value = "sprites")
-    var pokemonSpritesDto: PokemonSpritesDto
+    var pokemonSpritesDto: PokemonSpritesDto,
+
+    @SerializedName(value = "stats")
+    var listOfStats: List<StatDto>,
+
+    @SerializedName(value = "species")
+    var specieDto: SpecieDto?
+)
+
+data class SpecieDto(
+
+    @SerializedName(value = "name")
+    var specieName: String,
+
+    @SerializedName(value = "url")
+    var specieUrl : String
+)
+
+data class StatDto(
+
+    @SerializedName(value = "base_stat")
+    var baseStat : Int,
+
+    @SerializedName(value = "stat")
+    var statDetail : StatDetailDto
+)
+
+data class StatDetailDto (
+
+    @SerializedName(value = "name")
+    var statName: String,
+
+    //Not need for now,
+    @SerializedName(value = "url")
+    var statUrl: String,
+
 )
 
 data class PokemonSpritesDto (

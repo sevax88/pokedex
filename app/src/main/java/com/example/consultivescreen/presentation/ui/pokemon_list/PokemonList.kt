@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.example.consultivescreen.domain.model.PokemonDetailDomain
 
 @Composable
@@ -19,7 +20,7 @@ fun PokemonList(
                 Log.d("onList", " calling next page()")
                 onTriggerNextPage()
             }
-            PokemonView(pokemonDetailDomain = item)
+            PokemonView(pokemonDetailDomain = item, modifier = Modifier)
         }
     }
 }
