@@ -52,7 +52,7 @@ fun PokemonListScreen (
                 PokemonList(
                     loading = loading,
                     pokemonDetailDomains = pokemonDetailDomains,
-                    onTriggerNextPage = {viewModel.onTriggerEvent(PokemonListEvent.NextPageEvent)} ,
+                    onTriggerNextPage = { (viewModel::onTriggerEvent)(PokemonListEvent.NextPageEvent) },
                     page = page,
                 )
 

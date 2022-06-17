@@ -2,7 +2,6 @@ package com.example.consultivescreen.di
 
 import com.example.consultivescreen.network.PokemonService
 import com.example.consultivescreen.network.model.PokemonDetailDtoMapper
-import com.example.consultivescreen.network.model.PokemonDtoMapper
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -22,9 +21,6 @@ object NetworkModule {
     @Provides
     fun providePokemonDetailMapper(): PokemonDetailDtoMapper = PokemonDetailDtoMapper()
 
-    @Singleton
-    @Provides
-    fun providePokemonMapper(): PokemonDtoMapper = PokemonDtoMapper()
 
     @Singleton
     @Provides

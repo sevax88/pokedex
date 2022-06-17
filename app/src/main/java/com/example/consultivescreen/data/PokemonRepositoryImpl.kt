@@ -48,7 +48,7 @@ class PokemonRepositoryImpl(
         Log.d("repository", "calling for the offset: $offset")
 
         /*First check the cache, if the cache does not contain this page then get the info from the
-        network
+        network. This way we ensure a single source of truth, the cache.
          */
 
         /*
@@ -80,25 +80,26 @@ class PokemonRepositoryImpl(
          */
         val pokemons : PokemonsDto = pokemonService.getPokemonsList(offset)
 
-            val listOfDetailsPokesDto = mutableListOf<PokemonDetailDto>()
+        val listOfDetailsPokesDto = mutableListOf<PokemonDetailDto>()
 
-            for(poke in pokemons.listOfPokes){
-                val urlParts = poke.url.split("/")
-                val pokePosition = urlParts[urlParts.size -2].toInt()
-                Log.d("repository", "calling for the details of a poke: $pokePosition")
-                val pokeFullDetail = pokemonService.getPokemonDetails(id = pokePosition)
-                listOfDetailsPokesDto.add(pokeFullDetail)
-            }
+        for(poke in pokemons.listOfPokes){
+            val urlParts = poke.url.split("/")
+            val pokePosition = urlParts[urlParts.size -2].toInt()
+            Log.d("repository", "calling for the details of a poke: $pokePosition")
+            val pokeFullDetail = pokemonService.getPokemonDetails(id = pokePosition)
+            listOfDetailsPokesDto.add(pokeFullDetail)
+        }
 
-            val listOfDetailedPokesDomain = mutableListOf<PokemonDetailDomain>()
-            for(poke in listOfDetailsPokesDto){
-                listOfDetailedPokesDomain.add(pokemonDetailDtoMapper.mapToDomainModel(poke))
-            }
+        val listOfDetailedPokesDomain = mutableListOf<PokemonDetailDomain>()
+        for(poke in listOfDetailsPokesDto){
+            listOfDetailedPokesDomain.add(pokemonDetailDtoMapper.mapToDomainModel(poke))
+        }
 
-            //Insert into the cache
-            for (poke in listOfDetailedPokesDomain){
-                pokemonDao.insertPokemon(pokemon = pokemonEntityMapper.mapFromDomainModel(poke))
-            }
+        //ToDO: add a method in the dao for addAll instead of add them individually.
+        //Insert into the cache
+        for (poke in listOfDetailedPokesDomain){
+            pokemonDao.insertPokemon(pokemon = pokemonEntityMapper.mapFromDomainModel(poke))
+        }
 
         Log.d("repository", "getting the pokes from network")
         return DataState.success(listOfDetailedPokesDomain)

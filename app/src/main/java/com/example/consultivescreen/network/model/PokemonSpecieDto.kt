@@ -4,14 +4,12 @@ package com.example.consultivescreen.network.model
 import com.google.gson.annotations.SerializedName
 
 data class PokemonSpecieDto(
+
     @SerializedName("base_happiness")
     val baseHappiness: Int,
     @SerializedName("capture_rate")
     val captureRate: Int,
-    @SerializedName("color")
-    val color: ColorDto,
-    @SerializedName("egg_groups")
-    val eggGroups: List<EggGroupDto>,
+
     @SerializedName("evolution_chain")
     val evolutionChain: EvolutionChainDto,
     @SerializedName("evolves_from_species")
@@ -24,14 +22,8 @@ data class PokemonSpecieDto(
     val formsSwitchable: Boolean,
     @SerializedName("gender_rate")
     val genderRate: Int,
-    @SerializedName("genera")
-    val genera: List<GeneraDto>,
-    @SerializedName("generation")
-    val generation: GenerationDto,
-    @SerializedName("growth_rate")
-    val growthRate: GrowthRateDto,
-    @SerializedName("habitat")
-    val habitat: HabitatDto,
+
+
     @SerializedName("has_gender_differences")
     val hasGenderDifferences: Boolean,
     @SerializedName("hatch_counter")
@@ -46,16 +38,7 @@ data class PokemonSpecieDto(
     val isMythical: Boolean,
     @SerializedName("name")
     val name: String,
-    @SerializedName("names")
-    val names: List<SpecieNameDto>,
     @SerializedName("order")
     val order: Int,
-    @SerializedName("pal_park_encounters")
-    val palParkEncounters: List<PalParkEncounterDto>,
-    @SerializedName("pokedex_numbers")
-    val pokedexNumbers: List<PokedexNumberDto>,
-    @SerializedName("shape")
-    val shape: ShapeDto,
-    @SerializedName("varieties")
-    val varieties: List<VarietyDto>
+
 )

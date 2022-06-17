@@ -1,19 +1,18 @@
 package com.example.consultivescreen.domain.use_cases.pokemon_list
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.consultivescreen.data.IpokemonRepository
 import com.example.consultivescreen.domain.data.DataState
 import com.example.consultivescreen.domain.model.PokemonDetailDomain
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withContext
 
 /*
 This is a flow based use case
  */
 class GetPokemonList(
     private val repository: IpokemonRepository
-
 ) {
 
     val flowOfPokes = MutableStateFlow(DataState<List<PokemonDetailDomain>>())
@@ -22,11 +21,15 @@ class GetPokemonList(
 
         try {
 
-            flowOfPokes.emit(DataState.loading())
+            withContext(Dispatchers.IO){
 
-            val result = repository.getPokemonList(page)
+                flowOfPokes.emit(DataState.loading())
 
-            flowOfPokes.emit(result)
+                val result = repository.getPokemonList(page)
+
+                flowOfPokes.emit(result)
+
+            }
 
         } catch (e: Exception) {
             Log.d("ups",e.message!!)
