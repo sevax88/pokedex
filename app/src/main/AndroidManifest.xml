@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.consultivescreen">
+    package="com.example.pokedex">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
 
     <application
-        android:name=".presentation.BaseApplication"
+        android:name="com.example.pokedex.presentation.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -15,7 +15,7 @@
         android:theme="@style/Theme.ConsultiveScreen">
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.pokedex.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.ConsultiveScreen">
