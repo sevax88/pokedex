@@ -6,7 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.pokedex.domain.model.PokemonDetailDomain
 import com.example.pokedex.util.TAG
-import com.example.pokedex.domain.use_cases.pokemon_list.GetPokemonList
+import com.example.pokedex.domain.use_cases.pokemon_list.GetPokemonsFirstPage
+import com.example.pokedex.domain.use_cases.pokemon_list.GetPokemonsNextPage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,10 +18,11 @@ const val PAGE_SIZE = 20
 @HiltViewModel
 class PokemonListViewModel
 @Inject constructor(
-    private val getPokemonList : GetPokemonList,
+    private val getPokemonsFirstPage : GetPokemonsFirstPage,
+    private val getPokemonsNextPage: GetPokemonsNextPage,
 ) : ViewModel()
 {
-    // Pagination starts at '1' (-1 = exhausted)
+
     val page = mutableStateOf(1)
 
     val pokemons  = mutableStateOf<List<PokemonDetailDomain>>(emptyList())
@@ -31,38 +33,30 @@ class PokemonListViewModel
 
     init {
 
-        onTriggerEvent(PokemonListEvent.StartEvent)
+        loading.value = true
 
         viewModelScope.launch {
-            getPokemonList.flowOfPokes.collect {
+            getPokemonsFirstPage.execute().collect {
 
                 Log.d("repository", "someone change the loading state")
                 loading.value = it.loading
 
                 it.data?.let { data: List<PokemonDetailDomain> ->
-                    appendPokemons(data)
+                    pokemons.value = data
                 }
             }
         }
     }
 
-    private fun appendPokemons(data: List<PokemonDetailDomain>) {
-        val current = ArrayList(this.pokemons.value)
-        current.addAll(data)
-        this.pokemons.value = current
-    }
-
     fun onTriggerEvent(event: PokemonListEvent) {
-
         viewModelScope.launch {
             try {
                 when(event){
                     is PokemonListEvent.NextPageEvent -> {
+                        loading.value = true
                         delay(10)
                         nextPage()
                     }
-
-                    is PokemonListEvent.StartEvent -> firstPage()
                 }
             } catch (e: Exception){
                 Log.e(TAG, "launchJob: Exception: ${e}, ${e.cause}")
@@ -72,16 +66,11 @@ class PokemonListViewModel
                 Log.d(TAG, "launchJob: finally called.")
             }
         }
-
-    }
-
-    private suspend fun firstPage(){
-        getPokemonList.execute(page = page.value)
     }
 
     private suspend fun nextPage(){
         incrementPage()
-        getPokemonList.execute(page = page.value)
+        getPokemonsNextPage.execute(page = page.value)
     }
 
     private fun incrementPage(){
@@ -91,6 +80,5 @@ class PokemonListViewModel
     private fun setPage(page: Int){
         this.page.value = page
     }
-
 
 }

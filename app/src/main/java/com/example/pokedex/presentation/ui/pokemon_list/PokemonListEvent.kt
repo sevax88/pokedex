@@ -4,6 +4,4 @@ sealed class PokemonListEvent {
 
     object NextPageEvent: PokemonListEvent()
 
-    object StartEvent: PokemonListEvent()
-
 }

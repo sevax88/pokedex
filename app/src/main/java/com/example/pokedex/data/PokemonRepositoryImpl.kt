@@ -1,6 +1,7 @@
 package com.example.pokedex.data
 
 import android.util.Log
+import android.util.Range
 import com.example.pokedex.cache.PokemonDao
 import com.example.pokedex.cache.model.PokemonEntityMapper
 import com.example.pokedex.domain.data.DataState
@@ -9,7 +10,8 @@ import com.example.pokedex.network.PokemonService
 import com.example.pokedex.network.model.PokemonDetailDto
 import com.example.pokedex.network.model.PokemonDetailDtoMapper
 import com.example.pokedex.network.model.PokemonsDto
-import com.example.pokedex.presentation.ui.pokemon_list.PAGE_SIZE
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class PokemonRepositoryImpl(
     private val pokemonService: PokemonService,
@@ -18,65 +20,8 @@ class PokemonRepositoryImpl(
     private val pokemonEntityMapper: PokemonEntityMapper
 ) : IpokemonRepository {
 
-    override suspend fun getPokemonList(page: Int): DataState<List<PokemonDetailDomain>> {
-
-        Log.d("repository", "calling for the page of a pokes: $page")
-
-        /*
-        Map from page to offset as the api works with offsets but from the view´s perspective is
-        common to work with pages. The app will request poke info for pokes with ids starting from
-        offset until offset + page size
-         */
-
-        var offset = 0
-        var rangeToCheckFromCache = 0..0
-
-        offset = if (page == 1) {
-            0
-        } else {
-            page * PAGE_SIZE - PAGE_SIZE
-        }
-
-        rangeToCheckFromCache = if (page == 1){
-            1..20
-        } else {
-            offset + 1..offset + PAGE_SIZE
-        }
-
-        Log.d("repository", "calling for the offset: $offset")
-
-        /*First check the cache, if the cache does not contain this page then get the info from the
-        network. This way we ensure a single source of truth, the cache.
-         */
-
-        /*
-        Cache
-         */
-        val pokesRequestedAlreadyInCache = mutableListOf<PokemonDetailDomain>()
-        for (i in rangeToCheckFromCache){
-            Log.d("repository", "request from cache pokemon with id: $i")
-            val pokeFromCache = pokemonDao.getPokemonById(i)
-            if (pokeFromCache != null) {
-                Log.d("repository", "success getting pokemon from cache pokemon with id: $i")
-                pokesRequestedAlreadyInCache.add(pokemonEntityMapper.mapToDomainModel(pokeFromCache))
-            }
-        }
-
-        Log.d("repository", "pokesRequestedAlreadyInCache.size = ${pokesRequestedAlreadyInCache.size}")
-
-        /*
-        If all the elements in the range are already in cache, then return them directly from cache,
-        if not, go to take them from the network.
-         */
-        if (pokesRequestedAlreadyInCache.size == 20) {
-            Log.d("repository", "getting the pokes from cache")
-            return DataState.success(pokesRequestedAlreadyInCache)
-        }
-
-        /*
-        Network
-         */
-        val pokemons : PokemonsDto = pokemonService.getPokemonsList(offset)
+    override suspend fun getPokemonsFromNetwork(offset: Int) : List<PokemonDetailDomain> {
+        val pokemons : PokemonsDto = pokemonService.getPokemonsForPage(offset)
 
         val listOfDetailsPokesDto = mutableListOf<PokemonDetailDto>()
 
@@ -93,14 +38,30 @@ class PokemonRepositoryImpl(
             listOfDetailedPokesDomain.add(pokemonDetailDtoMapper.mapToDomainModel(poke))
         }
 
-        //ToDO: add a method in the dao for addAll instead of add them individually.
-        //Insert into the cache
-        for (poke in listOfDetailedPokesDomain){
-            pokemonDao.insertPokemon(pokemon = pokemonEntityMapper.mapFromDomainModel(poke))
-        }
+        return listOfDetailedPokesDomain
+    }
 
-        Log.d("repository", "getting the pokes from network")
-        return DataState.success(listOfDetailedPokesDomain)
+    override suspend fun getAllPokemonsFromDb(): Flow<DataState<List<PokemonDetailDomain>>> {
+        return pokemonDao.getAllPokemonsFlow().map {
+            val list = mutableListOf<PokemonDetailDomain>()
+            for (poke in it){
+                list.add(pokemonEntityMapper.mapToDomainModel(poke))
+            }
+            DataState.success(list)
+        }
+    }
+
+    override suspend fun insertPokemonsInDb(pokemonsToInsertInDb: List<PokemonDetailDomain>) {
+        pokemonDao.insertPokemons(pokemons = pokemonEntityMapper.mapListDomainToListEntity(pokemonsToInsertInDb))
+    }
+
+    override suspend fun isDbEmpty(): Boolean {
+        return pokemonDao.getFirstPokemon() == null
+    }
+
+    override suspend fun getPokemonsInDb(range: IntRange): List<PokemonDetailDomain>? {
+        val pokesInDb = pokemonDao.getPokemonsInRange(range.first, range.last)
+        return pokemonEntityMapper.mapListEntityToListDomain(pokesInDb)
     }
 
 }

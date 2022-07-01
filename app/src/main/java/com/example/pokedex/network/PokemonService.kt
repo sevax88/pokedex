@@ -9,7 +9,7 @@ import retrofit2.http.Query
 interface PokemonService {
 
     @GET("pokemon")
-    suspend fun getPokemonsList(
+    suspend fun getPokemonsForPage(
         @Query(value = "offset") offset : Int
     ): PokemonsDto
 

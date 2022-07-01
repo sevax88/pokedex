@@ -6,6 +6,24 @@ import com.example.pokedex.domain.util.DomainMapper
 
 class PokemonEntityMapper : DomainMapper<PokemonEntity, PokemonDetailDomain> {
 
+    fun mapListDomainToListEntity(listOfDomain: List<PokemonDetailDomain>): List<PokemonEntity> {
+        val listResult = mutableListOf<PokemonEntity>()
+        for (pokemonDomain in listOfDomain) {
+            listResult.add(mapFromDomainModel(pokemonDomain))
+        }
+        return listResult
+    }
+
+    fun mapListEntityToListDomain(listEntities: List<PokemonEntity>): List<PokemonDetailDomain>? {
+        return if (listEntities.isEmpty()) null else {
+            val listResult = mutableListOf<PokemonDetailDomain>()
+            for (pokeEntity in listEntities){
+                listResult.add(mapToDomainModel(pokeEntity))
+            }
+            listResult
+        }
+    }
+
     override fun mapToDomainModel(model: PokemonEntity): PokemonDetailDomain {
 
         //Types

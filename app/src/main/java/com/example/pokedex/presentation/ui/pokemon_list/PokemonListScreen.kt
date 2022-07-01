@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.example.pokedex.domain.model.PokemonDetailDomain
-import com.example.pokedex.ui.theme.ConsultiveScreenTheme
+import com.example.pokedex.ui.theme.PokedexScreenTheme
 
 @Composable
 fun PokemonListScreen (
@@ -27,7 +27,7 @@ fun PokemonListScreen (
 
     val error = viewModel.error.value
 
-    ConsultiveScreenTheme {
+    PokedexScreenTheme {
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
@@ -68,10 +68,3 @@ fun PokemonListScreen (
     }
 }
 
-//@Preview
-//@Composable
-//fun PokemonListPreview(){
-//    PokemonListScreen(viewModel = HiltViewModel)
-//
-//
-//}

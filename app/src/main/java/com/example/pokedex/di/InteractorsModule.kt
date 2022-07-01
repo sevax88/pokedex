@@ -4,10 +4,10 @@ import com.example.pokedex.cache.PokemonDao
 import com.example.pokedex.cache.model.PokemonEntityMapper
 import com.example.pokedex.data.IpokemonRepository
 import com.example.pokedex.data.PokemonRepositoryImpl
-import com.example.pokedex.domain.use_cases.pokemon_list.GetPokemonList
+import com.example.pokedex.domain.use_cases.pokemon_list.GetPokemonsFirstPage
+import com.example.pokedex.domain.use_cases.pokemon_list.GetPokemonsNextPage
 import com.example.pokedex.network.PokemonService
 import com.example.pokedex.network.model.PokemonDetailDtoMapper
-import com.example.pokedex.domain.use_cases.pokemon_detail.GetPokemonDetails
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,12 +20,10 @@ object InteractorsModule {
 
     @ViewModelScoped
     @Provides
-    fun provideGetPokemonUseCase(
+    fun provideGetPokemonFirstPageUseCase(
         repository: IpokemonRepository
-//        service: PokemonService,
-//        mapper: PokemonDetailDtoMapper
-    ) : GetPokemonList {
-        return GetPokemonList(repository)
+    ) : GetPokemonsFirstPage {
+        return GetPokemonsFirstPage(repository)
     }
 
     @ViewModelScoped
@@ -41,11 +39,10 @@ object InteractorsModule {
 
     @ViewModelScoped
     @Provides
-    fun provideGetPokemonDetailsUseCase(
-        service: PokemonService,
-        mapper: PokemonDetailDtoMapper
-    ) : GetPokemonDetails {
-        return GetPokemonDetails(service, mapper)
+    fun provideGetPokemonsNextPageUseCase(
+        repository: IpokemonRepository
+    ) : GetPokemonsNextPage {
+        return GetPokemonsNextPage(repository)
     }
 
 }
